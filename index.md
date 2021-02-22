@@ -1,4 +1,4 @@
-## Welcome to Zoo-HZ-Media-Volunteers.2021-2022
+## Welcome :)
 
 这里是杭州动物园媒体组志愿者摄影记录.
 <br>2021-2022
@@ -6,8 +6,7 @@
 
 
 ### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+提交照片时, 请注明作者及拍摄日期, 同时也可以提交一段文字, 叙述
 
 ```markdown
 Syntax highlighted code block
