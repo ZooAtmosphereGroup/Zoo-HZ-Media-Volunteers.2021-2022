@@ -1,8 +1,9 @@
 ## Welcome to Zoo-HZ-Media-Volunteers.2021-2022
 
-You can use the [editor on GitHub](https://github.com/ZooAtmosphereGroup/Zoo-HZ-Media-Volunteers.2021-2022/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+这里是杭州动物园媒体组志愿者摄影记录.
+2021-2022
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+
 
 ### Markdown
 
