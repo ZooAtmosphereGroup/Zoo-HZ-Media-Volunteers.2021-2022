@@ -82,5 +82,5 @@ class HelloPhoto(object):
 
 
 if __name__ == '__main__':
-    HelloPhoto.transfer_jpg_to_webp('/home/z04014/Pictures')
+    HelloPhoto.transfer_jpg_to_webp('/home/Pictures')
     # HelloPhoto.create_thumbnail('/home/Pictures')
