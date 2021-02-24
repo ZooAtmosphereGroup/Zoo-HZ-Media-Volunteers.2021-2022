@@ -23,14 +23,5 @@ end
 
 
 
-### ./static
-
-![Octocat](./static/images/Autumn_in_Kanas_by_Wang_Jinyu.jpg)
-
-### /static
-
-![Octocat](/static/images/Autumn_in_Kanas_by_Wang_Jinyu.jpg)
-
-### abs
-
+### 2.6M
 ![Octocat](https://zooatmospheregroup.github.io/Zoo-HZ-Media-Volunteers.2021-2022/static/images/Autumn_in_Kanas_by_Wang_Jinyu.jpg)
