@@ -104,7 +104,7 @@ class HelloPhoto(object):
 
                 _, _f = os.path.split(_path_file)
                 _path = os.path.join(path_out, _f)
-                im.resize((width, height)).save(_path + '.3200.jpg', 'JPEG')
+                im.resize((width, height)).save(_path + '.3200.webp', 'WEBP')
             except Exception as e:
                 print("cannot convert", _path_file, e)
 
@@ -167,11 +167,19 @@ layout: default
 
 
 if __name__ == '__main__':
-    # HelloPhoto.transfer_jpg_to_webp('/home/Pictures')
+    # HelloPhoto.transfer_jpg_to_webp(
+    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\raw\202005\20200520',
+    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp\202005\20200520',
+    # )
+    # HelloPhoto.resize_with_the_same_ratio(
+    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp\202005\20200520',
+    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp-resize-3200\202005\20200520',
+    # )
     HelloPhoto.render_markdown(
-        '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/raw/202102/test')
-    HelloPhoto.render_markdown(
-        '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp/202102/test')
-    HelloPhoto.render_markdown(
-        '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp-resize-3200/202102/test')
+        r'C:/-C/Zoo-HZ-Media-Volunteers/static/images/webp-resize-3200/202005/20200520',
+    )
+    # HelloPhoto.render_markdown(
+    #     '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp/202102/test')
+    # HelloPhoto.render_markdown(
+    #     '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp-resize-3200/202102/test')
     # HelloPhoto.create_thumbnail('/home/Pictures')
