@@ -4,7 +4,7 @@ from PIL import Image
 
 
 class HelloPhoto(object):
-    url_home = 'https://zooatmospheregroup.github.io/Zoo-HZ-Media-Volunteers.2021-2022/'
+    url_home = 'https://zooatmospheregroup.github.io/Zoo-HZ-Media-Volunteers.2021-2022'
 
     def __init__(self):
         pass
@@ -169,5 +169,9 @@ layout: default
 if __name__ == '__main__':
     # HelloPhoto.transfer_jpg_to_webp('/home/Pictures')
     HelloPhoto.render_markdown(
-        '/home/z04014/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp/202102/test')
+        '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/raw/202102/test')
+    HelloPhoto.render_markdown(
+        '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp/202102/test')
+    HelloPhoto.render_markdown(
+        '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp-resize-3200/202102/test')
     # HelloPhoto.create_thumbnail('/home/Pictures')
