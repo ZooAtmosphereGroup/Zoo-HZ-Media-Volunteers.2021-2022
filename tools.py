@@ -125,7 +125,7 @@ class HelloPhoto(object):
 
     @classmethod
     def render_markdown(cls, path_in):
-        path_out = path_in.replace('/static/images/', '/markdowns/')
+        path_out = path_in.replace('/static/images/', '/mds/')
         path_out_head, tail = os.path.split(path_out)
         cls.mkdir_if_not_exist(path_out_head)
 
