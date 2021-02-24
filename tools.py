@@ -4,7 +4,7 @@ from PIL import Image
 
 
 class HelloPhoto(object):
-    url_home = 'https://zooatmospheregroup.github.io/Zoo-HZ-Media-Volunteers.2021-2022'
+    url_home = 'https://zooatmospheregroup.github.io/Zoo-HZ-Media-Volunteers'
 
     def __init__(self):
         pass
