@@ -171,13 +171,16 @@ if __name__ == '__main__':
     #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\raw\202005\20200520',
     #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp\202005\20200520',
     # )
-    HelloPhoto.resize_with_the_same_ratio(
-        r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp\202005\20200520',
-        r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp-resize-2000\202005\20200520',
-        size_max=2000
-    )
+    # HelloPhoto.resize_with_the_same_ratio(
+    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp\202005\20200520',
+    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp-resize-2000\202005\20200520',
+    #     size_max=2000
+    # )
+    # HelloPhoto.render_markdown(
+    #     r'C:/-C/Zoo-HZ-Media-Volunteers/static/images/webp-resize-2000/202005/20200520',
+    # )
     HelloPhoto.render_markdown(
-        r'C:/-C/Zoo-HZ-Media-Volunteers/static/images/webp-resize-2000/202005/20200520',
+        r'C:/-C/Zoo-HZ-Media-Volunteers/static/images/raw/202005/20200520',
     )
     # HelloPhoto.render_markdown(
     #     '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp/202102/test')
