@@ -86,7 +86,7 @@ class HelloPhoto(object):
         return
 
     @classmethod
-    def resize_with_the_same_ratio(cls, path_in, path_out, width_max=3200, height_max=3200):
+    def resize_with_the_same_ratio(cls, path_in, path_out, size_max=3200):
         cls.mkdir_if_not_exist(path_out)
 
         def _do(_path_file):
@@ -96,15 +96,15 @@ class HelloPhoto(object):
                 width, height = im.size
 
                 if width >= height:
-                    height = int(height / (width / width_max))
-                    width = width_max
+                    height = int(height / (width / size_max))
+                    width = size_max
                 else:
-                    width = int(width / (height / height_max))
-                    height = height_max
+                    width = int(width / (height / size_max))
+                    height = size_max
 
                 _, _f = os.path.split(_path_file)
                 _path = os.path.join(path_out, _f)
-                im.resize((width, height)).save(_path + '.3200.webp', 'WEBP')
+                im.resize((width, height)).save(_path + '.%s.webp' % size_max, 'WEBP')
             except Exception as e:
                 print("cannot convert", _path_file, e)
 
@@ -171,12 +171,13 @@ if __name__ == '__main__':
     #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\raw\202005\20200520',
     #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp\202005\20200520',
     # )
-    # HelloPhoto.resize_with_the_same_ratio(
-    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp\202005\20200520',
-    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp-resize-3200\202005\20200520',
-    # )
+    HelloPhoto.resize_with_the_same_ratio(
+        r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp\202005\20200520',
+        r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp-resize-2400\202005\20200520',
+        size_max=2400
+    )
     HelloPhoto.render_markdown(
-        r'C:/-C/Zoo-HZ-Media-Volunteers/static/images/webp-resize-3200/202005/20200520',
+        r'C:/-C/Zoo-HZ-Media-Volunteers/static/images/webp-resize-2400/202005/20200520',
     )
     # HelloPhoto.render_markdown(
     #     '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp/202102/test')
