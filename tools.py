@@ -152,8 +152,7 @@ layout: default
             size_str = 'size: %sM' % size
 
             # url_home/static/images/webp/zzz/a.webp
-            path_relative_f = path_abs_f[path_abs_f.find('/static/images/'):]
-            path = cls.url_home + path_relative_f
+            path = path_abs_f[path_abs_f.find('/static/images/'):]
             item = md_item.format(size=size_str, name=f, path=path, message='')
             md += item
 
