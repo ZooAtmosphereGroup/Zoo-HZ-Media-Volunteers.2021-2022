@@ -25,6 +25,7 @@ _path_list = [
 
 class HelloPhoto(object):
     file_rendered = os.path.join(_path_files, 'rendered.info')
+    file_ink = os.path.join(_path_files, 'ink.png')
     url_home = 'https://zooatmospheregroup.github.io/Zoo-HZ-Media-Volunteers'
 
     def __init__(self):
@@ -172,6 +173,10 @@ class HelloPhoto(object):
         return
 
     @classmethod
+    def add_ink(cls, path_in, ink_size=64, ink_position=''):
+        pass
+
+    @classmethod
     def render_markdown(cls, path_in, path_out):
         path_out_head, tail = os.path.split(path_out)
         cls.mkdir_if_not_exist(path_out_head)
@@ -211,7 +216,7 @@ layout: default
     def render_home_page(cls, path_in):
         pass
 
-    def render_all(self, do_filter=True, do_transfer_jpg_to_webp=True, do_resize=True,
+    def render_all(self, do_filter=True, do_add_ink=True, do_transfer_jpg_to_webp=True, do_resize=True,
                    do_render_md=True, do_render_home=True, do_dump=True):
         rendered = self.load_rendered()
         raw = os.listdir(_path_images_raw)
@@ -233,7 +238,7 @@ layout: default
                 # /static/images/raw/202002/20200202xxx
                 path_raw_day = os.path.join(path_raw_month, raw_day)
 
-                if path_raw_day in rendered:
+                if do_filter and path_raw_day in rendered:
                     print(path_raw_day, 'has rendered')
                     continue
                 if not os.path.isdir(path_raw_day):
@@ -248,6 +253,8 @@ layout: default
                         self.transfer_jpg_to_webp(path_raw_day, path_webp_day)
                     if do_resize:
                         self.resize_with_the_same_ratio(path_webp_day, path_resize_day)
+                    if do_add_ink:
+                        self.add_ink(path_resize_day, ink_size=32)
                     if do_render_md:
                         self.render_markdown(path_resize_day, path_mds_resize_day)
                     rendered[path_raw_day] = True
