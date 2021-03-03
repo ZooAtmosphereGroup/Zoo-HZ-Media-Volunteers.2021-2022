@@ -1,13 +1,53 @@
 import os
+from string import punctuation
+import json
 
 from PIL import Image
 
+_path_project = os.path.dirname(os.path.abspath(__file__))
+_path_files = os.path.join(_path_project, '_files')
+_path_mds = os.path.join(_path_project, 'mds')
+_path_mds_resize = os.path.join(_path_mds, 'webp-resize-2000')
+_path_static = os.path.join(_path_project, 'static')
+_path_images = os.path.join(_path_static, 'images')
+_path_images_raw = os.path.join(_path_images, 'raw')
+_path_images_webp = os.path.join(_path_images, 'webp')
+_path_images_resize = os.path.join(_path_images, 'webp-resize-2000')
+
+_path_list = [
+    _path_files,
+    _path_mds_resize,
+    _path_images_raw,
+    _path_images_webp,
+    _path_images_resize
+]
+
 
 class HelloPhoto(object):
+    file_rendered = os.path.join(_path_files, 'rendered.info')
     url_home = 'https://zooatmospheregroup.github.io/Zoo-HZ-Media-Volunteers'
 
     def __init__(self):
-        pass
+        for i in _path_list:
+            self.mkdir_if_not_exist(i)
+        if os.path.exists(self.file_rendered):
+            return
+        with open(self.file_rendered, 'w') as f:
+            json.dump({}, f)
+
+    @classmethod
+    def load_rendered(cls):
+        with open(cls.file_rendered, 'r') as f:
+            return json.load(f)
+
+    @classmethod
+    def dump_rendered(cls, rendered):
+        with open(cls.file_rendered, 'w') as f:
+            json.dump(rendered, f)
+
+    @classmethod
+    def fix_file_name(cls, file_name):
+        return ''.join([f.lower() for f in file_name if f == '.' or f not in punctuation])
 
     @staticmethod
     def mkdir_if_not_exist(path):
@@ -22,9 +62,17 @@ class HelloPhoto(object):
         def _do(_path_file):
             print('transfer_jpg_to_webp', _path_file)
             try:
-                _, _f = os.path.split(_path_file)
-                _path = os.path.join(path_out, _f)
-                Image.open(_path_file).convert("RGB").save(_path + '.webp', 'WEBP')
+                _p, _f = os.path.split(_path_file)
+                _file_fix = cls.fix_file_name(_f)
+                _path_fix = os.path.join(_p, _file_fix)
+                if _f != _file_fix:
+                    os.rename(_path_file, _path_fix)
+                _path_dst = os.path.join(path_out, _file_fix)
+                if _path_dst[-4:] in ('.jpg', '.mpg', '.png'):
+                    _path_dst = _path_dst[:-4]
+                if _path_dst.endswith('.mpeg'):
+                    _path_dst = _path_dst[:-5]
+                Image.open(_path_fix).convert("RGB").save(_path_dst + '.webp', 'WEBP')
             except Exception as e:
                 print("cannot convert", _path_file, e)
 
@@ -104,7 +152,7 @@ class HelloPhoto(object):
 
                 _, _f = os.path.split(_path_file)
                 _path = os.path.join(path_out, _f)
-                im.resize((width, height)).save(_path + '.%s.webp' % size_max, 'WEBP')
+                im.resize((width, height)).save(_path, 'WEBP')
             except Exception as e:
                 print("cannot convert", _path_file, e)
 
@@ -124,8 +172,7 @@ class HelloPhoto(object):
         return
 
     @classmethod
-    def render_markdown(cls, path_in):
-        path_out = path_in.replace('/static/images/', '/mds/')
+    def render_markdown(cls, path_in, path_out):
         path_out_head, tail = os.path.split(path_out)
         cls.mkdir_if_not_exist(path_out_head)
 
@@ -139,7 +186,7 @@ layout: default
 ### render for path: %s
 
 """ % path_in
-        md_item = """### {size}, {name}, {message}
+        md_item = """## {size}, {name}
 ![{name}]({path})
 
 """
@@ -153,10 +200,10 @@ layout: default
 
             # url_home/static/images/webp/zzz/a.webp
             path = path_abs_f[path_abs_f.find('/static/images/'):]
-            item = md_item.format(size=size_str, name=f, path=path, message='')
+            item = md_item.format(size=size_str, name=f, path=path)
             md += item
 
-        with open(os.path.join(path_out_head, tail + '.md'), 'w') as f:
+        with open(os.path.join(path_out_head, tail), 'w') as f:
             f.write(md)
         return
 
@@ -164,25 +211,92 @@ layout: default
     def render_home_page(cls, path_in):
         pass
 
+    def render_all(self, do_filter=True, do_transfer_jpg_to_webp=True, do_resize=True,
+                   do_render_md=True, do_render_home=True, do_dump=True):
+        rendered = self.load_rendered()
+        raw = os.listdir(_path_images_raw)
+        for raw_month in raw:
+            # /static/images/raw/202002
+            path_raw_month = os.path.join(_path_images_raw, raw_month)
+
+            if not os.path.isdir(path_raw_month):
+                print(path_raw_month, 'is not dir')
+                continue
+
+            raw_days = os.listdir(path_raw_month)
+            path_raw_month = os.path.join(_path_images_raw, raw_month)
+            path_webp_month = os.path.join(_path_images_webp, raw_month)
+            path_resize_month = os.path.join(_path_images_resize, raw_month)
+            path_mds_resize_month = os.path.join(_path_mds_resize, raw_month)
+
+            for raw_day in raw_days:
+                # /static/images/raw/202002/20200202xxx
+                path_raw_day = os.path.join(path_raw_month, raw_day)
+
+                if path_raw_day in rendered:
+                    print(path_raw_day, 'has rendered')
+                    continue
+                if not os.path.isdir(path_raw_day):
+                    print(path_raw_day, 'is not dir')
+                    continue
+
+                path_webp_day = os.path.join(path_webp_month, raw_day)
+                path_resize_day = os.path.join(path_resize_month, raw_day)
+                path_mds_resize_day = os.path.join(path_mds_resize_month, raw_day + '.md')
+                try:
+                    if do_transfer_jpg_to_webp:
+                        self.transfer_jpg_to_webp(path_raw_day, path_webp_day)
+                    if do_resize:
+                        self.resize_with_the_same_ratio(path_webp_day, path_resize_day)
+                    if do_render_md:
+                        self.render_markdown(path_resize_day, path_mds_resize_day)
+                    rendered[path_raw_day] = True
+                except Exception as e:
+                    print(path_raw_day, e)
+                    continue
+
+        if do_dump:
+            self.dump_rendered(rendered)
+
+        if do_render_home:
+            self.render_home_page(_path_mds_resize)
+
+    def render_all_but_no_dump(self):
+        self.render_all(
+            do_transfer_jpg_to_webp=True,
+            do_resize=True,
+            do_render_md=True,
+            do_render_home=True,
+            do_dump=False
+        )
+
+    def just_transfer_and_resize(self):
+        self.render_all(
+            do_render_md=False,
+            do_render_home=False,
+            do_dump=False
+        )
+
+    def just_render_md(self):
+        self.render_all(
+            do_transfer_jpg_to_webp=False,
+            do_resize=False,
+            do_render_md=True,
+            do_render_home=False,
+            do_dump=False
+        )
+
+    def just_render_home_page(self):
+        self.render_all(
+            do_transfer_jpg_to_webp=False,
+            do_resize=False,
+            do_render_md=False,
+            do_render_home=True,
+            do_dump=False
+        )
+
 
 if __name__ == '__main__':
-    # HelloPhoto.transfer_jpg_to_webp(
-    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\raw\202005\20200520',
-    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp\202005\20200520',
-    # )
-    # HelloPhoto.resize_with_the_same_ratio(
-    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp\202005\20200520',
-    #     r'C:\-C\Zoo-HZ-Media-Volunteers\static\images\webp-resize-2000\202005\20200520',
-    #     size_max=2000
-    # )
-    # HelloPhoto.render_markdown(
-    #     r'C:/-C/Zoo-HZ-Media-Volunteers/static/images/webp-resize-2000/202005/20200520',
-    # )
-    HelloPhoto.render_markdown(
-        r'C:/-C/Zoo-HZ-Media-Volunteers/static/images/raw/202005/20200520',
-    )
-    # HelloPhoto.render_markdown(
-    #     '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp/202102/test')
-    # HelloPhoto.render_markdown(
-    #     '/home/Desktop/Cloud/Zoo-HZ-Media-Volunteers.2021-2022/static/images/webp-resize-3200/202102/test')
-    # HelloPhoto.create_thumbnail('/home/Pictures')
+
+    hp = HelloPhoto()
+    hp.render_all()
